@@ -3,9 +3,9 @@ This repository implements and organizes data structure knowledge for obtaining 
 I will not directly upload the knowledge provided in the Samsung Winter Special Lecture.
 
 # DataStructures & Algorithms
-- [] LinkedList
-- [] DoubleLinkedList
-- [] Tree
+- [V] LinkedList
+- [V] DoubleLinkedList
+- [V] Tree
 - [] HashMap
 - [] HashSet
 - [] LCA
