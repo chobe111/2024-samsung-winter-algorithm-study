@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.22)
+project(samsung_algorithm)
+
+set(CMAKE_CXX_STANDARD 14)
+
+add_executable(samsung_algorithm main.cpp tree_post_order_search.cpp tree_in_order_search.cpp double_linked_list.cpp single_linked_list.cpp)
