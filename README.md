@@ -15,5 +15,7 @@ I will not directly upload the knowledge provided in the Samsung Winter Special 
 - [] Stack
 - [] Queue
 - [] BinaryIndexTree
+- [V] Kruskal
+- [V] Union Find
 
 # Recommend problems
