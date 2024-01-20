@@ -7,6 +7,10 @@
 //using namespace std;
 //
 //int T;
+
+// 10
+//
+// 2771 3441 4999 6894 (18105)
 //
 //int main() {
 //    ios_base::sync_with_stdio(false);
