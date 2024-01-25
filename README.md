@@ -6,12 +6,12 @@ I will not directly upload the knowledge provided in the Samsung Winter Special 
 - [V] LinkedList
 - [V] DoubleLinkedList
 - [V] Tree
-- [] HashMap
-- [] HashSet
+- [V] HashMap
+- [V] HashSet
 - [V] LCA
 - [] KMP
 - [] Trie
-- [] SegmentTree
+- [V] SegmentTree
 - [] Stack
 - [] Queue
 - [] BinaryIndexTree
