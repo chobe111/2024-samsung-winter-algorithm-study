@@ -10,7 +10,7 @@ I will not directly upload the knowledge provided in the Samsung Winter Special 
 - [V] HashSet
 - [V] LCA
 - [] KMP
-- [] Trie
+- [V] Trie
 - [V] SegmentTree
 - [] Stack
 - [] Queue
