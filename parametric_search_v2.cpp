@@ -1,3 +1,4 @@
+/*
 #include<iostream>
 #include<functional>
 #include<vector>
@@ -85,4 +86,4 @@ int main() {
         cout << "#" << i << " " << solve() << "\n";
     }
     return 0;
-}
+}*/
