@@ -13,7 +13,7 @@ I will not directly upload the knowledge provided in the Samsung Winter Special 
 - [V] Trie
 - [V] SegmentTree
 - [] Stack
-- [] Queue
+- [V] Queue
 - [] BinaryIndexTree
 - [V] Kruskal
 - [V] Union Find
