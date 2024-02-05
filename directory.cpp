@@ -1,145 +1,258 @@
-//
-// Created by myungki cho on 2024/02/02.
-//
+/*
+#ifndef _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
+#endif
 
+#include<stdio.h>
 #include<iostream>
+#include<map>
 #include<vector>
-#include<unordered_set>
-#include<unordered_map>
 #include<cmath>
 #include<sstream>
+#include<cstring>
 
+#define NAME_MAXLEN 6
+#define PATH_MAXLEN 1999
 #define MAX 50001
+typedef long long ll;
 using namespace std;
 
-class FileSystem {
-private:
-    struct Directory {
-        int parent_directory;
-        // child name, directory index
-        unordered_map<int, int> child_directory_map;
-        int num;
-        int size;
+#define CMD_MKDIR 1
+#define CMD_RM 2
+#define CMD_CP 3
+#define CMD_MV 4
+#define CMD_FIND 5
 
-        void add_child(int name, int directory_num) {
-            child_directory_map.insert({name, directory_num});
-        }
+#define NAME_MAXLEN 6
+#define PATH_MAXLEN 1999
 
-        int find_child(int directory_num) {
-            auto find_info = child_directory_map.find(directory_num);
-            if (find_info == child_directory_map.end()) return 0;
-            return find_info->second;
-        }
+extern void init(int n);
 
-        void remove_child(int name) {
-            child_directory_map.erase(name);
-        }
-    };
+extern void cmd_mkdir(char path[PATH_MAXLEN + 1], char name[NAME_MAXLEN + 1]);
 
-    inline int name_to_integer(string name) {
-        int ret = 0;
-        for (int i = 0; i < name.size(); i++) {
-            if (name[i] == '\0') continue;
-            ret += pow(26, i) * int(name[i] - 'a');
-        }
-        return ret;
-    }
+extern void cmd_rm(char path[PATH_MAXLEN + 1]);
+
+extern void cmd_cp(char srcPath[PATH_MAXLEN + 1], char dstPath[PATH_MAXLEN + 1]);
+
+extern void cmd_mv(char srcPath[PATH_MAXLEN + 1], char dstPath[PATH_MAXLEN + 1]);
+
+extern int cmd_find(char path[PATH_MAXLEN + 1]);
+
+static bool run(int m) {
+
+    bool isAccepted = true;
+    int cmd;
+    char name[NAME_MAXLEN + 1];
+    char path1[PATH_MAXLEN + 1], path2[PATH_MAXLEN + 1];
+
+    while (m--) {
+
+        scanf("%d", &cmd);
+
+        if (cmd == CMD_MKDIR) {
+            scanf("%s%s", path1, name);
+            cmd_mkdir(path1, name);
+        } else if (cmd == CMD_RM) {
+            scanf("%s", path1);
+            cmd_rm(path1);
+        } else if (cmd == CMD_CP) {
+            scanf("%s%s", path1, path2);
+            cmd_cp(path1, path2);
+        } else if (cmd == CMD_MV) {
+            scanf("%s%s", path1, path2);
+            cmd_mv(path1, path2);
+        } else {
+            int ret;
+            int answer;
+
+            scanf("%s", path1);
+            ret = cmd_find(path1);
+            scanf("%d", &answer);
+//            cout << "find_result = " << ret << " " << answer << "\n";
 
 
-    vector<int> get_path_info(char path[2000]) {
-        vector<int> ret;
-        string sub_string;
-        istringstream ss(path);
-
-        while (getline(ss, sub_string, '/')) {
-            ret.push_back(name_to_integer(sub_string));
-        }
-        return ret;
-    }
-
-public:
-    int directory_cnt;
-    Directory directories[MAX];
-
-    Directory getDirectory(int parentIndex) {
-        Directory newDirectory = directories[directory_cnt++];
-        newDirectory.num = directory_cnt;
-        newDirectory.parent_directory = parentIndex;
-
-        return newDirectory;
-    }
-
-    FileSystem() {
-        Directory rootDirectory = getDirectory(-1);
-    }
-
-    // O(1200)
-    void make_directory(char path[2000], char name[7]) {
-        vector<int> path_list = get_path_info(path);
-        int newName = name_to_integer(name);
-        Directory newDirectory = getDirectory(0);
-        Directory curDirectory = directories[0];
-        for (int i = 1; i < path_list.size(); i++) {
-            directories[curDirectory.find_child(path_list[i])].size += 1;
-        }
-        curDirectory.add_child(newName, newDirectory.num);
-        newDirectory.parent_directory = curDirectory.num;
-    }
-
-    void remove_directory(char path[2000]) {
-        vector<int> path_list = get_path_info(path);
-        Directory curDirectory = directories[0];
-        for (int i = 1; i < path_list.size(); i++) {
-            curDirectory = directories[curDirectory.find_child(path_list[i])];
-        }
-        directories[curDirectory.parent_directory].remove_child(path_list[path_list.size() - 1]);
-        int removeSize = curDirectory.size;
-
-        curDirectory = directories[0];
-        for (int i = 1; i < path_list.size(); i++) {
-            curDirectory.size -= removeSize;
-            curDirectory = directories[curDirectory.find_child(path_list[i])];
+            isAccepted &= (ret == answer);
         }
     }
 
-    // O(1200)
-    void copy_directory(char srcPath[2000], char targetPath[2000]) {
-        vector<int> src_path_list = get_path_info(srcPath);
-        vector<int> target_path_list = get_path_info(targetPath);
+    return isAccepted;
+}
 
-        Directory srcCurDirectory = directories[0];
-        Directory tarCurDirectory = directories[0];
-        for (int i = 1; i < src_path_list.size(); i++) {
-            srcCurDirectory = directories[srcCurDirectory.find_child(src_path_list[i])];
+int main(void) {
+
+    int test, T;
+    int n, m;
+
+    // freopen("sample_input.txt", "r", stdin);
+
+    setbuf(stdout, NULL);
+
+    scanf("%d", &T);
+
+    for (test = 1; test <= T; ++test) {
+
+        scanf("%d%d", &n, &m);
+
+        init(n);
+
+        if (run(m)) {
+            printf("#%d 100\n", test);
+        } else {
+            printf("#%d 0\n", test);
         }
-
-        for(int i = 1; i < target_path_list.size(); i++) {
-            tarCurDirectory = directories[tarCurDirectory.find_child(target_path_list[i])];
-        }
-
-        int srcCurDirectoryName = src_path_list[src_path_list.size()-1];
-        tarCurDirectory.add_child(srcCurDirectoryName, srcCurDirectory.num);
     }
-
-    // O(1200)
-    void move_directory() {
-
-    }
-
-    // O(1)
-    int get_descendant_nums(char path[2000]) {
-        Directory curDirectory = directories[0];
-        vector<int> path_list = get_path_info(path);
-        for (int i = 1; i < path_list.size(); i++) {
-            curDirectory = directories[curDirectory.find_child(path_list[i])];
-        }
-        return curDirectory.size;
-    }
-};
-
-
-int main() {
-
 
     return 0;
 }
+#include <bits/stdc++.h>
+using namespace std;
+
+#define PATH_MAXLEN 1999
+
+struct Directory {
+    int subDirectoryCount;
+    long long directoryNameHash;
+    array<int, 30> childIndices;
+    int childCount;
+    int parentIndex;
+    Directory() { }
+    Directory(long long nameHash) {
+        this->directoryNameHash = nameHash;
+        subDirectoryCount = 0;
+    }
+};
+
+Directory directoryPool[50'050];
+int poolPointer = 0;
+int rootIndex;
+
+int createDirectory(long long nameHash) {
+    Directory &newDirectory = directoryPool[poolPointer++];
+    newDirectory.directoryNameHash = nameHash;
+    newDirectory.subDirectoryCount = 0;
+    newDirectory.childCount = 0;
+    newDirectory.parentIndex = -1;
+    return poolPointer - 1;
+}
+
+int cloneDirectory(int targetIndex) {
+    int cloneIndex = createDirectory(directoryPool[targetIndex].directoryNameHash);
+    Directory &clone = directoryPool[cloneIndex];
+    clone.subDirectoryCount = directoryPool[targetIndex].subDirectoryCount;
+    clone.parentIndex = -1;
+    clone.childCount = 0;
+    for (int i = 0; i < directoryPool[targetIndex].childCount; ++i) {
+        int childCloneIndex = cloneDirectory(directoryPool[targetIndex].childIndices[i]);
+        clone.childIndices[clone.childCount++] = childCloneIndex;
+        directoryPool[childCloneIndex].parentIndex = cloneIndex;
+    }
+    return cloneIndex;
+}
+
+void init(int n) {
+    poolPointer = 0;
+    rootIndex = createDirectory(0);
+}
+
+int convertPathToDirectoryIndex(char path[PATH_MAXLEN + 1]) {
+    int currentDirectoryIndex = rootIndex;
+    for (int i = 1; path[i]; ) {
+        int pathPosition = i;
+        long long directoryNameHash = 0;
+        while (path[pathPosition] != '/') {
+            directoryNameHash <<= 5;
+            directoryNameHash += (path[pathPosition] - 'a' + 1);
+            ++pathPosition;
+        }
+        int left = 0, right = directoryPool[currentDirectoryIndex].childCount - 1;
+        while (left < right) {
+            int mid = (left + right) / 2;
+            if (directoryPool[directoryPool[currentDirectoryIndex].childIndices[mid]].directoryNameHash >= directoryNameHash) right = mid;
+            else left = mid + 1;
+        }
+        currentDirectoryIndex = directoryPool[currentDirectoryIndex].childIndices[right];
+        i = pathPosition + 1;
+    }
+    return currentDirectoryIndex;
+}
+
+inline void insertChild(array<int, 30> &children, int &childCount, int childIndex) {
+    children[childCount++] = childIndex;
+    for (int i = childCount - 2; i >= 0; --i) {
+        if (directoryPool[children[i]].directoryNameHash > directoryPool[children[i + 1]].directoryNameHash) swap(children[i], children[i + 1]);
+        else break;
+    }
+}
+
+void updateParentSubdirectoryCount(int directoryIndex, int delta) {
+    while (directoryIndex != -1) {
+        directoryPool[directoryIndex].subDirectoryCount += delta;
+        directoryIndex = directoryPool[directoryIndex].parentIndex;
+    }
+}
+
+void cmd_mkdir(char path[PATH_MAXLEN + 1], char name[NAME_MAXLEN + 1]) {
+    int parentIndex = convertPathToDirectoryIndex(path);
+    updateParentSubdirectoryCount(parentIndex, 1);
+    long long nameHash = 0;
+    for (int i = 0; name[i]; ++i) {
+        nameHash <<= 5;
+        nameHash += (name[i] - 'a' + 1);
+    }
+    int newDirectoryIndex = createDirectory(nameHash);
+    insertChild(directoryPool[parentIndex].childIndices, directoryPool[parentIndex].childCount, newDirectoryIndex);
+    directoryPool[newDirectoryIndex].parentIndex = parentIndex;
+}
+
+void removeDirectoryByIndex(int directoryIndex) {
+    int parentIndex = directoryPool[directoryIndex].parentIndex;
+
+    // 이진 탐색으로 자식 목록에서 삭제할 디렉토리의 인덱스를 찾습니다.
+    int left = 0, right = directoryPool[parentIndex].childCount - 1;
+    while (left < right) {
+        int mid = (left + right) / 2;
+        if (directoryPool[directoryPool[parentIndex].childIndices[mid]].directoryNameHash >= directoryPool[directoryIndex].directoryNameHash) {
+            right = mid;
+        } else {
+            left = mid + 1;
+        }
+    }
+
+    // 찾은 인덱스 이후의 모든 자식들을 한 칸씩 앞으로 이동시킵니다.
+    for (int i = right; i < directoryPool[parentIndex].childCount - 1; ++i) {
+        directoryPool[parentIndex].childIndices[i] = directoryPool[parentIndex].childIndices[i + 1];
+    }
+
+    // 부모 디렉토리의 자식 수를 감소시킵니다.
+    --directoryPool[parentIndex].childCount;
+    updateParentSubdirectoryCount(parentIndex, -(directoryPool[directoryIndex].subDirectoryCount + 1));
+}
+
+void cmd_rm(char path[PATH_MAXLEN + 1]) {
+    int directoryIndex = convertPathToDirectoryIndex(path);
+    removeDirectoryByIndex(directoryIndex);
+}
+
+
+void cmd_cp(char srcPath[PATH_MAXLEN + 1], char dstPath[PATH_MAXLEN + 1]) {
+    int srcIndex = convertPathToDirectoryIndex(srcPath);
+    int dstIndex = convertPathToDirectoryIndex(dstPath);
+    updateParentSubdirectoryCount(dstIndex, directoryPool[srcIndex].subDirectoryCount + 1);
+    int cloneIndex = cloneDirectory(srcIndex);
+    insertChild(directoryPool[dstIndex].childIndices, directoryPool[dstIndex].childCount, cloneIndex);
+    directoryPool[cloneIndex].parentIndex = dstIndex;
+}
+
+void cmd_mv(char srcPath[PATH_MAXLEN + 1], char dstPath[PATH_MAXLEN + 1]) {
+    int srcIndex = convertPathToDirectoryIndex(srcPath);
+    int dstIndex = convertPathToDirectoryIndex(dstPath);
+    updateParentSubdirectoryCount(dstIndex, directoryPool[srcIndex].subDirectoryCount + 1);
+    cmd_rm(srcPath);
+    insertChild(directoryPool[dstIndex].childIndices, directoryPool[dstIndex].childCount, srcIndex);
+    directoryPool[srcIndex].parentIndex = dstIndex;
+}
+
+int cmd_find(char path[PATH_MAXLEN + 1]) {
+    return directoryPool[convertPathToDirectoryIndex(path)].subDirectoryCount;
+}
+*/
