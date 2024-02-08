@@ -12,7 +12,7 @@ I will not directly upload the knowledge provided in the Samsung Winter Special 
 - [V] KMP
 - [V] Trie
 - [V] SegmentTree
-- [] Stack
+- [V] Stack
 - [V] Queue
 - [] BinaryIndexTree
 - [V] Kruskal
