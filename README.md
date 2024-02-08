@@ -14,7 +14,7 @@ I will not directly upload the knowledge provided in the Samsung Winter Special 
 - [V] SegmentTree
 - [V] Stack
 - [V] Queue
-- [] BinaryIndexTree
+- [V] BinaryIndexTree
 - [V] Kruskal
 - [V] Union Find
 
