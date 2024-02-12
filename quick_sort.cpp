@@ -1,6 +1,7 @@
 //
 // Created by myungki cho on 2024/02/11.
 //
+/*
 #include<iostream>
 #include<algorithm>
 
@@ -43,4 +44,4 @@ int main() {
     partition(0,5);
     debug();
     return 0;
-}
+}*/
