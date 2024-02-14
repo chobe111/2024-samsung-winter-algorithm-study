@@ -17,5 +17,6 @@ I will not directly upload the knowledge provided in the Samsung Winter Special 
 - [V] BinaryIndexTree
 - [V] Kruskal
 - [V] Union Find
+- [V] Quick Sort
 
 # Recommend problems
